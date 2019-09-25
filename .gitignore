@@ -1,6 +1,6 @@
 *~
 *\#
-*.swp
+.swp
 .env
 .idea
 .buildpath
@@ -9,5 +9,5 @@
 .svn/
 config.php
 composer.phar
-composer.lock
-/vendor/
+# composer.lock
+vendor/
