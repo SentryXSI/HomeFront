@@ -80,7 +80,7 @@ abstract class BaseController
             $path .= '/' . $route['action'];
         }
 
-        $path .= '.stpl.php';
+        $path .= '.tpl.php';
 
         pre( $path );
 
