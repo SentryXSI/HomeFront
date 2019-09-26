@@ -15,12 +15,15 @@ use App\Kernel\BaseController;
  */
 class IndexController extends BaseController
 {
-    /**
+    /**-------------------------------------------------------------------------
+     *
      * IndexController constructor.
+     *
+     * -------------------------------------------------------------------------
      *
      * @param $response
      */
-    public function __construct( $response = [] ) {
+    public function __construct( $response = [] ){
         parent::__construct( $response );
     }
 
@@ -29,6 +32,9 @@ class IndexController extends BaseController
      * Get Index
      *
      * -------------------------------------------------------------------------
+     *
+     * @return mixed|void
+     * @throws \Exception
      */
     public function getIndex(){
         $this->display();

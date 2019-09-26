@@ -9,6 +9,9 @@ namespace App\Kernel;
  *
  * -----------------------------------------------------------------------------
  *
+ * NinjaSentry HomeFront
+ *
+ * @author NinjaSentry
  * @package App\Kernel
  */
 final class Bootstrap
@@ -24,7 +27,9 @@ final class Bootstrap
      *
      * Bootstrap constructor.
      *
-     * -------------------------------------------------------------------------
+     * -------------------------------------------------------------------------or.
+     *
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -45,6 +50,8 @@ final class Bootstrap
      * Get Env
      *
      * -------------------------------------------------------------------------
+     *
+     * @throws \Exception
      */
     private function getEnv()
     {
@@ -52,16 +59,22 @@ final class Bootstrap
 
         if( ! \file_exists( $filePath ) )
         {
-            exit( 'Bootstrap Error :: getEnv() - '
-                . '.env file not found' );
+            throw new \Exception(
+                'Bootstrap Error :: getEnv() - '
+                . '.env file not found'
+                , 503
+            );
         }
 
         $config = \file( $filePath );
 
         if( ! \is_array( $config ) )
         {
-            exit( 'Bootstrap Error :: getEnv() - '
-                . '$config array not found' );
+            throw new \Exception(
+                'Bootstrap Error :: getEnv() - '
+                . '$config array not found'
+                , 503
+            );
         }
 
         foreach( $config as $item )
@@ -94,6 +107,7 @@ final class Bootstrap
     {
         $this->basePath = $_ENV['BASE_PATH'];
         $this->baseUrl  = $_ENV['BASE_URL'];
+        $this->theme    = $_ENV['THEME_NAME'] ?? 'sweet';
     }
 
     /**-------------------------------------------------------------------------
@@ -136,8 +150,67 @@ final class Bootstrap
      * Dispatch
      *
      * -------------------------------------------------------------------------
+     *
+     * @throws \Exception
      */
     private function dispatch()
+    {
+        $component = $this->getComponent();
+
+        $namespace = $component['namespace'];
+        $classname = $component['controller'];
+        $method    = $component['action'];
+
+        $controllerClass = $namespace . $classname;
+
+        if( ! \class_exists( $controllerClass ) )
+        {
+            throw new \Exception(
+                'Bootstrap Error :: dispatch() - '
+                . 'Controller not found ( '
+                . $controllerClass
+                . ' )'
+                , 404
+            );
+        }
+
+        $this->response = [
+            'baseUrl'  => $this->baseUrl,
+            'basePath' => $this->basePath,
+            'request'  => $this->request,
+            'route'    => $this->route,
+        ];
+
+        $controller = new $controllerClass( $this->response );
+
+        if( ! \is_callable([ $controller, $method ]) )
+        {
+            throw new \Exception(
+                'Bootstrap Error :: dispatch() - '
+                . 'class method ( '
+                . $method
+                . ' ) not found in controller ( '
+                . $controllerClass
+                . ' )'
+                , 404
+            );
+        }
+
+        \ob_start();
+        $controller->$method();
+        $this->content = \ob_get_clean();
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Get Component
+     *
+     * -------------------------------------------------------------------------
+     *
+     * Prepare component parts
+     *
+     */
+    private function getComponent()
     {
         $component = \str_replace( ' ', '', \ucwords(
             \str_replace( '-', ' ' , $this->route['component'] )
@@ -155,69 +228,18 @@ final class Bootstrap
         $action    = \ucfirst( $this->route['action'] );
         $method    = 'get' . $action;
 
-        $this->route['dispatchHandler'] = [
-            'component'   => $component,
-            'controller'  => $classname,
-            'action'      => $method,
-            'param'       => $this->route['param'] ?? '',
+        $config    = [
+            'namespace'  => $namespace,
+            'component'  => $component,
+            'controller' => $classname,
+            'action'     => $method,
+            'param'      => $this->route['param'] ?? '',
         ];
 
-        $this->response = [
-            'baseUrl'  => $this->baseUrl,
-            'basePath' => $this->basePath,
-            'request'  => $this->request,
-            'route'    => $this->route,
-        ];
+        $this->route['dispatchHandler'] = $config;
 
-        $controllerClass = $namespace . $classname;
-
-        if( ! \class_exists( $controllerClass ) )
-        {
-            echo 'Bootstrap Error :: dispatch() - Controller class not found';
-            pre( $controllerClass );
-            exit;
-        }
-
-        $controller = new $controllerClass( $this->response );
-
-        ob_start();
-        $controller->$method();
-        $this->content = ob_get_clean();
+        return $config;
     }
-
-
-    private function getComponent()
-    {
-        $component = \str_replace( ' ', '', \ucwords(
-            \str_replace( '-', ' ' , $this->route['component'] )
-        ));
-
-        $namespace = "App\\Components\\$component\\";
-        $classname = ucfirst( $this->route['controller'] )
-            . 'Controller' ?? 'IndexController';
-
-
-        $action    = $this->route['action'] ?? 'Index';
-
-        $method    = 'get' . $action;
-
-
-
-
-
-
-        $this->route['dispatchHandler'] = [
-            'namespace'   => $namespace,
-            'component'   => $component,
-            'controller'  => $classname,
-            'action'      => $method,
-            'param'       => '',
-        ];
-
-
-
-    }
-
 
     /**-------------------------------------------------------------------------
      *
@@ -225,6 +247,7 @@ final class Bootstrap
      *
      * -------------------------------------------------------------------------
      *
+     * @throws \Exception
      */
     private function getContent()
     {
@@ -233,9 +256,12 @@ final class Bootstrap
 
         if( ! \file_exists( $filePath ) )
         {
-            echo 'Bootstrap Error :: getContent() - File not found';
-            pre( $filePath );
-            exit;
+            throw new \Exception(
+                'Bootstrap Error :: getContent() - '
+                . 'File not found ( '
+                . $filePath
+                . ' )'
+            );
         }
 
         require $filePath;
@@ -254,7 +280,12 @@ final class Bootstrap
         $this->request['query']  = $_SERVER['QUERY_STRING']                  ?? '';
     }
 
-    /**
+    /**-------------------------------------------------------------------------
+     *
+     * Error Handler
+     *
+     * -------------------------------------------------------------------------
+     *
      * @param $errNo
      * @param $errStr
      * @param $errFile
@@ -269,13 +300,20 @@ final class Bootstrap
         );
     }
 
-    /**
+    /**-------------------------------------------------------------------------
+     *
+     * Exception Handler
+     *
+     * -------------------------------------------------------------------------
+     *
      * @param \Throwable $e
      */
     public function exceptionHandler( \Throwable $e )
     {
+        $message = $e->getMessage();
+
         echo '<h1>Exception</h1>';
-        pre( $e->getMessage() );
+        pre( $message() );
 
         pre( 'Line : ' . $e->getLine() );
         pre( 'File : ' . $e->getFile() );
@@ -283,23 +321,23 @@ final class Bootstrap
         echo '<hr /><p>Trace</p>';
         pre( $e->getTrace() );
 
-        $message = $e->getMessage();
-
         $logFile = $this->basePath
             . 'app/tmp/'
             . \date('Y-m-d')
             . '-exceptions.log';
 
         \error_log( $message, 3, $logFile );
-
     }
 
-    /**
+    /**-------------------------------------------------------------------------
      *
+     * Shutdown Handler
+     *
+     * -------------------------------------------------------------------------
      */
     public function shutdownHandler()
     {
-        $error = error_get_last();
+        $error = \error_get_last();
 
         if( isset( $error['type'] ) )
         {
