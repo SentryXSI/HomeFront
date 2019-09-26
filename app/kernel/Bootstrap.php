@@ -28,31 +28,16 @@ final class Bootstrap
      */
     public function __construct()
     {
-
         register_shutdown_function([ $this, 'shutdownHandler']);
         set_exception_handler([ $this, 'exceptionHandler']);
         set_error_handler([ $this, 'errorHandler']);
 
-
-        //try{
-
-            $this->getEnv();
-            $this->getConfig();
-            $this->getRequest();
-            $this->getRoute();
-            $this->dispatch();
-            $this->getContent();
-        //}
-        //catch( \Throwable $e )
-        //{
-            //pre( $e->getMessage() );
-            //pre( 'Line : ' . $e->getLine() );
-            //pre( 'File : ' . $e->getFile() );
-            //pre( 'Code : ' . $e->getCode() );
-            //echo '<hr /><p>Trace</p>';
-            //pre( $e->getTrace() );
-
-        //}
+        $this->getEnv();
+        $this->getConfig();
+        $this->getRequest();
+        $this->getRoute();
+        $this->dispatch();
+        $this->getContent();
     }
 
     /**-------------------------------------------------------------------------
