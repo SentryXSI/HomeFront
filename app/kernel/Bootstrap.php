@@ -28,12 +28,31 @@ final class Bootstrap
      */
     public function __construct()
     {
-        $this->getEnv();
-        $this->getConfig();
-        $this->getRequest();
-        $this->getRoute();
-        $this->dispatch();
-        $this->getContent();
+
+        register_shutdown_function([ $this, 'shutdownHandler']);
+        set_exception_handler([ $this, 'exceptionHandler']);
+        set_error_handler([ $this, 'errorHandler']);
+
+
+        //try{
+
+            $this->getEnv();
+            $this->getConfig();
+            $this->getRequest();
+            $this->getRoute();
+            $this->dispatch();
+            $this->getContent();
+        //}
+        //catch( \Throwable $e )
+        //{
+            //pre( $e->getMessage() );
+            //pre( 'Line : ' . $e->getLine() );
+            //pre( 'File : ' . $e->getFile() );
+            //pre( 'Code : ' . $e->getCode() );
+            //echo '<hr /><p>Trace</p>';
+            //pre( $e->getTrace() );
+
+        //}
     }
 
     /**-------------------------------------------------------------------------
@@ -135,18 +154,27 @@ final class Bootstrap
      */
     private function dispatch()
     {
-        $component = \ucfirst( $this->route['component'] );
+        $component = \str_replace( ' ', '', \ucwords(
+            \str_replace( '-', ' ' , $this->route['component'] )
+        ));
 
         $namespace = "App\\Components\\$component\\";
-        $classname = 'IndexController';
-        $action    = 'Index';
+
+        if( $this->route['controller'] !== 'index' ){
+            $namespace .= 'Controllers\\';
+        }
+
+        $classname = \ucfirst( $this->route['controller'] ) . 'Controller'
+            ?? 'IndexController';
+
+        $action    = \ucfirst( $this->route['action'] );
         $method    = 'get' . $action;
 
         $this->route['dispatchHandler'] = [
             'component'   => $component,
             'controller'  => $classname,
             'action'      => $method,
-            'param'       => '',
+            'param'       => $this->route['param'] ?? '',
         ];
 
         $this->response = [
@@ -156,21 +184,55 @@ final class Bootstrap
             'route'    => $this->route,
         ];
 
-        $controllerName = $namespace . $classname;
+        $controllerClass = $namespace . $classname;
 
-        if( ! \class_exists( $controllerName ) )
+        if( ! \class_exists( $controllerClass ) )
         {
-            echo 'Bootstrap Error :: dispatch() - Controller file not found';
-            pre( $controllerName );
+            echo 'Bootstrap Error :: dispatch() - Controller class not found';
+            pre( $controllerClass );
             exit;
         }
 
-        $controller = new $controllerName( $this->response );
+        $controller = new $controllerClass( $this->response );
 
         ob_start();
         $controller->$method();
         $this->content = ob_get_clean();
     }
+
+
+    private function getComponent()
+    {
+        $component = \str_replace( ' ', '', \ucwords(
+            \str_replace( '-', ' ' , $this->route['component'] )
+        ));
+
+        $namespace = "App\\Components\\$component\\";
+        $classname = ucfirst( $this->route['controller'] )
+            . 'Controller' ?? 'IndexController';
+
+
+        $action    = $this->route['action'] ?? 'Index';
+
+        $method    = 'get' . $action;
+
+
+
+
+
+
+        $this->route['dispatchHandler'] = [
+            'namespace'   => $namespace,
+            'component'   => $component,
+            'controller'  => $classname,
+            'action'      => $method,
+            'param'       => '',
+        ];
+
+
+
+    }
+
 
     /**-------------------------------------------------------------------------
      *
@@ -184,7 +246,7 @@ final class Bootstrap
         $filePath = $this->basePath
             . 'public/themes/sweet/index.html.php';
 
-        if( ! file_exists( $filePath ) )
+        if( ! \file_exists( $filePath ) )
         {
             echo 'Bootstrap Error :: getContent() - File not found';
             pre( $filePath );
@@ -202,7 +264,67 @@ final class Bootstrap
      */
     public function getRequest()
     {
-        $this->request['method'] = $_SERVER['REQUEST_METHOD'] ?? '';
-        $this->request['uri']    = $_SERVER['REQUEST_URI']    ?? '';
+        $this->request['method'] = \strtolower( $_SERVER['REQUEST_METHOD'] ) ?? '';
+        $this->request['uri']    = \trim( $_SERVER['REQUEST_URI'], '/' )     ?? '';
+        $this->request['query']  = $_SERVER['QUERY_STRING']                  ?? '';
+    }
+
+    /**
+     * @param $errNo
+     * @param $errStr
+     * @param $errFile
+     * @param $errLine
+     *
+     * @throws \ErrorException
+     */
+    public function errorHandler( $errNo, $errStr, $errFile, $errLine )
+    {
+        throw new \ErrorException(
+            $errStr, 503, $errNo, $errFile, $errLine
+        );
+    }
+
+    /**
+     * @param \Throwable $e
+     */
+    public function exceptionHandler( \Throwable $e )
+    {
+        echo '<h1>Exception</h1>';
+        pre( $e->getMessage() );
+
+        pre( 'Line : ' . $e->getLine() );
+        pre( 'File : ' . $e->getFile() );
+        pre( 'Code : ' . $e->getCode() );
+        echo '<hr /><p>Trace</p>';
+        pre( $e->getTrace() );
+
+        $message = $e->getMessage();
+
+        $logFile = $this->basePath
+            . 'app/tmp/'
+            . \date('Y-m-d')
+            . '-exceptions.log';
+
+        \error_log( $message, 3, $logFile );
+
+    }
+
+    /**
+     *
+     */
+    public function shutdownHandler()
+    {
+        $error = error_get_last();
+
+        if( isset( $error['type'] ) )
+        {
+            $message = \implode( ' ', $error );
+            $logFile = $this->basePath
+                . 'app/tmp/'
+                . \date('Y-m-d')
+                . '-shutdown-error.log';
+
+            \error_log( $message, 3, $logFile );
+        }
     }
 }

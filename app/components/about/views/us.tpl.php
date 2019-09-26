@@ -2,12 +2,12 @@
 /*
 meta_start
 id          : 1
-title       : Welcome to HomeFront
-heading     : Welcome to HomFront
+title       : About Us
+heading     : About Us
 intro       : HomeFront Control Panel
 category    : home
-desc        : Welcome to the home page
-keys        : home page keywords
+desc        : Welcome to the about us page
+keys        : about homefront
 author      : NinjaSentry
 status      : published
 robots      : index,follow
@@ -24,15 +24,11 @@ meta_end
 ?>
 <div class="inner-content">
     <div class="ns-heading col-xs-12">
-        <h2>NinjaSentry HomeFront</h2>
+        <h2>About Us</h2>
     </div>
-    <div class="col-xs-12">
-        <p>Welcome to <a href="https://github.com/SentryXSI/homefront"><strong>HomeFront</strong></a> version 1.0</p>
+    <div class="col-xs-12 col-sm-6">
     </div>
-    <div class="col-xs-12">
-        <?php
-        pre( $this );
-        ?>
+    <div class="col-xs-12 col-sm-6">
     </div>
     <div class="clearfix"></div>
 </div>

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Components\Home;
 
+use App\Kernel\BaseController;
+
 /**-----------------------------------------------------------------------------
  *
  * Class IndexController
@@ -11,15 +13,15 @@ namespace App\Components\Home;
  *
  * @package App\Components\Home
  */
-class IndexController
+class IndexController extends BaseController
 {
     /**
      * IndexController constructor.
      *
      * @param $response
      */
-    public function __construct( $response ) {
-        $this->response = $response;
+    public function __construct( $response = [] ) {
+        parent::__construct( $response );
     }
 
     /**-------------------------------------------------------------------------
@@ -28,18 +30,7 @@ class IndexController
      *
      * -------------------------------------------------------------------------
      */
-    public function getIndex()
-    {
-        $filePath = $this->response['basePath']
-            . 'app/components/home/views/index.tpl.php';
-
-        if( ! \file_exists( $filePath ) ) {
-            echo 'IndexController Error :: getIndex() - file not found ( ';
-            echo $filePath;
-            echo ' ) ';
-            exit;
-        }
-
-        return require $filePath;
+    public function getIndex(){
+        $this->display();
     }
 }

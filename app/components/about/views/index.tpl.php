@@ -26,10 +26,11 @@ meta_end
     <div class="ns-heading col-xs-12">
         <h2>About HomeFront</h2>
     </div>
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12">
         <p>HomeFront is a minimal cms / control panel for your localhost server.</p>
     </div>
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12">
+        <?php pre( $this ); ?>
     </div>
     <div class="clearfix"></div>
 </div>
