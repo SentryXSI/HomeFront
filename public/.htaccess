@@ -1,0 +1,30 @@
+#-----------------------------------------------
+# NinjaSentry HomeFront - Htaccess Sept 2019
+#-----------------------------------------------
+Options +FollowSymLinks
+Options -Indexes
+IndexIgnore *
+AddDefaultCharset UTF-8
+DirectoryIndex index.php
+RewriteEngine On
+
+# redirect all http to https
+# RewriteCond %{HTTPS} !=on
+# RewriteRule (.*) https://homefront.mint/$1 [NC,R=301,L]
+
+## redirect www to non www
+RewriteCond %{REQUEST_URI} (.*) [NC]
+RewriteCond %{HTTP_HOST} .
+RewriteCond %{HTTP_HOST} !^homefront.mint
+RewriteRule (.*) http://homefront.mint/$1 [NC,R=301,L]
+
+# exclude assets, images, robots.txt
+RewriteCond %{REQUEST_URI} !(?:/assets/(.*)) [NC]
+RewriteCond %{REQUEST_URI} !\.(?:png|jpe?g|bmp|svg|ico|js|css|ttf|eot|woff2?|robots\.txt)$ [NC]
+# exclude filename
+RewriteCond %{REQUEST_FILENAME} !-f
+# exclude directory
+RewriteCond %{REQUEST_FILENAME} !-d
+# exclude symbolic link
+# RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule (.+) index.php?route=$1 [QSA,L]
