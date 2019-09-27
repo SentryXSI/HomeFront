@@ -82,8 +82,6 @@ abstract class BaseController
 
         $path .= '.tpl.php';
 
-        pre( $path );
-
         return $path;
     }
 }
