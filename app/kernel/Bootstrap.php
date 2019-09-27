@@ -227,7 +227,7 @@ final class Bootstrap
             ?? 'IndexController';
 
         $action    = \ucfirst( $this->route['action'] );
-        $method    = 'get' . $action;
+        $method    = $this->request['method'] . $action;
 
         $config    = [
             'namespace'  => $namespace,
@@ -314,7 +314,7 @@ final class Bootstrap
         $message = $e->getMessage();
 
         echo '<h1>Exception</h1>';
-        pre( $message() );
+        pre( $message );
 
         pre( 'Line : ' . $e->getLine() );
         pre( 'File : ' . $e->getFile() );
