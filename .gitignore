@@ -1,6 +1,6 @@
 *~
 *\#
-.log
+*.log
 .swp
 .env
 .idea
