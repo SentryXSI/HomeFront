@@ -82,6 +82,7 @@ final class Bootstrap
             if( empty( $item )
                 || ! \is_string( $item )
                 || \substr( $item, 0, 1 ) === '#'
+                || \strpos( $item, '=' ) === false
             ){
                 continue;
             }
