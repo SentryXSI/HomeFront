@@ -3,7 +3,7 @@
 meta_start
 id          : 1
 title       : Welcome to HomeFront
-heading     : Welcome to HomFront
+heading     : Welcome to HomeFront
 intro       : HomeFront Control Panel
 category    : home
 desc        : Welcome to the home page
