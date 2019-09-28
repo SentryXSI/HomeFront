@@ -176,10 +176,10 @@ final class Bootstrap
         }
 
         $this->response = [
-            'baseUrl'  => $this->baseUrl,
-            'basePath' => $this->basePath,
-            'request'  => $this->request,
-            'route'    => $this->route,
+            'baseUrl'   => $this->baseUrl,
+            'basePath'  => $this->basePath,
+            'request'   => $this->request,
+            'route'     => $this->route,
         ];
 
         $controller = new $controllerClass( $this->response );
@@ -226,14 +226,11 @@ final class Bootstrap
         $classname = \ucfirst( $this->route['controller'] ) . 'Controller'
             ?? 'IndexController';
 
-        $action    = \ucfirst( $this->route['action'] );
-        $method    = $this->request['method'] . $action;
-
-        $config    = [
+        $config = [
             'namespace'  => $namespace,
             'component'  => $component,
             'controller' => $classname,
-            'action'     => $method,
+            'action'     => $this->getAction(),
             'param'      => $this->route['param'] ?? '',
         ];
 
@@ -279,6 +276,24 @@ final class Bootstrap
         $this->request['method'] = \strtolower( $_SERVER['REQUEST_METHOD'] ) ?? '';
         $this->request['uri']    = \trim( $_SERVER['REQUEST_URI'], '/' )     ?? '';
         $this->request['query']  = $_SERVER['QUERY_STRING']                  ?? '';
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Get Action
+     *
+     * -------------------------------------------------------------------------
+     *
+     * Return request method + route action segment
+     *
+     * @return string
+     */
+    private function getAction()
+    {
+        $action = \ucfirst( $this->route['action'] );
+        $method = $this->request['method'] . $action;
+
+        return $method;
     }
 
     /**-------------------------------------------------------------------------
