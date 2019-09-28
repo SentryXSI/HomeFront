@@ -51,55 +51,105 @@ class AjaxController extends BaseController
      *
      * Add note
      *
+     * @throws \Exception
      */
     public function postAdd()
     {
-        if( empty( $_POST ) ) {
-            echo 'Notes/Add Error :: POST not found';
+        try{
+            $this->validatePost();
+        }
+        catch( \Throwable $e )
+        {
+            pre( $e->getMessage() );
+
+            exit('AjaxController :: postAdd() - Post validation error');
         }
 
-        if( empty( $_POST['token'] ) ) {
-            echo 'Notes/Add Error :: Form token not found';
-        }
+        try{
 
-        if( empty( $_POST['title'] ) ) {
-            echo 'Notes/Add Error :: title not found';
-        }
+            $path = $this->getPath() . 'notes-test.txt';
+            $data = $this->prepare();
 
-        if( empty( $_POST['content'] ) ) {
-            echo 'Notes/Add Error :: content not found';
+            $this->save( $path, $data );
+        }
+        catch( \Throwable $e )
+        {
+            pre( $e->getMessage() );
         }
 
         // temp debug
-
+        // TODO :: add debug mode toggle switch
         pre( $_POST );
+    }
 
-        // prepare data
-        // todo :: input filter
-
+    /**-------------------------------------------------------------------------
+     *
+     * Prepare
+     *
+     * -------------------------------------------------------------------------
+     *
+     * @return array|false|string
+     */
+    private function prepare()
+    {
         $data = [
             'title'   => $_POST['title'],
             'content' => $_POST['content'],
             'created' => \date('Y-m-d H:i:s'),
+            'updated' => \date('Y-m-d H:i:s'),
         ];
 
-        $data = \json_encode( $data );
-        $path = $this->getPath() . 'notes-test.txt';
+        try{
 
-        //
-        // save to file
-        //
+            $data = \json_encode( $data, JSON_THROW_ON_ERROR );
+
+            return $data;
+        }
+        catch( \Throwable $e ){
+
+            pre( $e->getMessage() );
+
+            exit;
+        }
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Save
+     *
+     * -------------------------------------------------------------------------
+     *
+     * @param $path
+     * @param $data
+     *
+     * @throws \Exception
+     */
+    private function save( $path, $data )
+    {
+        if( empty( $data ) )
+        {
+            throw new \Exception(
+                'Notes Error :: save() - data not found'
+            );
+        }
+
+        if( empty( $path ) )
+        {
+            throw new \Exception(
+                'Notes Error :: save() - path not found'
+            );
+        }
 
         $spl = new \SplFileObject( $path, 'w+b' );
 
         if( null === ( $spl->fwrite( $data ) ) )
         {
-            echo 'Notes :: Error - Unable to save file';
+            echo 'Notes Error :: save() - Unable to save file';
             pre( $path );
 
         } else {
 
-            echo 'Notes :: Success - note created';
+            echo '<p class="alert alert-success">Notes :: Success - note created</p>';
         }
 
         $spl = null;
@@ -107,9 +157,61 @@ class AjaxController extends BaseController
 
     /**-------------------------------------------------------------------------
      *
+     * Validate Post
+     *
+     * -------------------------------------------------------------------------
+     *
+     * TODO :: add input filter
+     *
+     * @throws \Exception
+     */
+    private function validatePost()
+    {
+        if( empty( $_POST ) ) {
+
+            throw new \Exception(
+                'Notes Error :: POST not found'
+            );
+        }
+
+        if( empty( $_POST['token'] ) )
+        {
+            throw new \Exception(
+                'Notes Error :: Form token not found'
+            );
+        }
+
+        if( empty( $_POST['title'] ) )
+        {
+            throw new \Exception(
+                'Notes Error :: title not found'
+            );
+        }
+
+        if( empty( $_POST['content'] ) )
+        {
+            throw new \Exception(
+                'Notes Error :: content not found'
+            );
+        }
+
+        // $data['title'] = $input->post('title')
+        //       ->strLen('65')
+        //       ->notEmpty()
+        //       ->acceptOnly('text')
+        //       ->trim()
+        //       ->validate();
+
+        // return $data;
+    }
+
+    /**-------------------------------------------------------------------------
+     *
      * Get Path
      *
      * -------------------------------------------------------------------------
+     *
+     * Prepare absolute path to notes directory
      *
      * @return string
      */
@@ -140,7 +242,7 @@ class AjaxController extends BaseController
         {
             if( ! @\mkdir( $path ) )
             {
-                echo 'Notes/AjaxController :: Setup() - '
+                echo 'Notes/AjaxController Error :: Setup() - '
                     . 'Unable to create directory';
                 pre( $path );
                 exit;

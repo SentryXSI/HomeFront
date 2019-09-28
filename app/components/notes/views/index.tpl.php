@@ -6,7 +6,7 @@ title       : Notes Component
 heading     : My Notes
 intro       : Notes
 category    : notes
-desc        : Welcome to the page
+desc        : Welcome to the notes page
 keys        : page keywords
 author      : NinjaSentry
 status      : published
@@ -21,6 +21,8 @@ last_edit   : 0000-00-00
 wrap_heading : true
 meta_end
 */
+
+// TODO :: add $_SESSION + CSRF token validation
 
 // temporary form token ^_-
 $date        = \date('d-m-y H:i:s');
@@ -40,10 +42,10 @@ $formToken   = \hash_hmac( 'sha512', $clientToken, $appToken );
         </ul>
     </div>
     <div class="col-xs-12 col-sm-8">
-        <form action="notes/add" method="post" role="form">
+        <form id="textEditor" action="notes/add" method="post" role="form">
             <div class="form-group">
                 <label for="Title">Title</label>
-                <input type="text" name="title" class="form-control" id="Title"  value="Today" />
+                <input type="text" name="title" class="form-control input-lg" id="Title"  value="Today" />
             </div>
             <div class="form-group">
                 <label for="Content">Content</label>
@@ -63,7 +65,7 @@ $formToken   = \hash_hmac( 'sha512', $clientToken, $appToken );
 
         var saveBtn = $('#saveBtn');
 
-        saveBtn.on('click', function( e ){
+        saveBtn.on( 'click', function( e ){
 
             e.preventDefault();
 
