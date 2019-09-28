@@ -37,7 +37,19 @@ class IndexController extends BaseController
      * @return mixed|void
      * @throws \Exception
      */
-    public function getIndex(){
+    public function getIndex()
+    {
+        $filePath = $this->response['basePath']
+            . 'app/content/notes/notes-test.txt';
+
+        $data = [];
+
+        if( \file_exists( $filePath ) ) {
+            $data = \file_get_contents( $filePath );
+            $data = \json_decode( $data, true );
+        }
+
+        $this->content( 'body', $data );
         $this->display();
     }
 

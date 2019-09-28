@@ -40,7 +40,7 @@ class AjaxController extends BaseController
      * @throws \Exception
      */
     public function getIndex(){
-        $this->display();
+       // $this->display();
     }
 
     /**-------------------------------------------------------------------------

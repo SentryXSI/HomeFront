@@ -18,8 +18,11 @@ abstract class BaseController
      */
     public $response = [];
 
-    /**
+    /**-------------------------------------------------------------------------
+     *
      * BaseController constructor.
+     *
+     * -------------------------------------------------------------------------
      *
      * @param array $response
      */
@@ -27,7 +30,12 @@ abstract class BaseController
         $this->response = $response;
     }
 
-    /**
+    /**-------------------------------------------------------------------------
+     *
+     * Get Index
+     *
+     * -------------------------------------------------------------------------
+     *
      * @return mixed
      */
     abstract public function getIndex();
@@ -83,5 +91,23 @@ abstract class BaseController
         $path .= '.tpl.php';
 
         return $path;
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Content
+     *
+     * -------------------------------------------------------------------------
+     *
+     * Add response content
+     *
+     * @param string $name
+     * @param array  $data
+     */
+    public function content( $name = '', $data = [] )
+    {
+        $this->response['content'] = [
+            $name => $data
+        ];
     }
 }

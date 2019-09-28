@@ -4,3 +4,7 @@
     background:#242424;
     color:#c5c5c5;
 }
+#textEditor textarea {
+    font-size:14px;
+    padding:10px;
+}

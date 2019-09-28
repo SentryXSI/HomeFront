@@ -30,6 +30,9 @@ $appToken    = \ip2long( $_SERVER['SERVER_ADDR'] ) . $date;
 $clientToken = \ip2long( $_SERVER['REMOTE_ADDR'] ) . $date;
 $formToken   = \hash_hmac( 'sha512', $clientToken, $appToken );
 
+// form content
+$notes       = $this->response['content']['body'] ?? [];
+
 ?>
 <div class="inner-content">
     <div class="ns-heading col-xs-12">
@@ -45,14 +48,24 @@ $formToken   = \hash_hmac( 'sha512', $clientToken, $appToken );
         <form id="textEditor" action="notes/add" method="post" role="form">
             <div class="form-group">
                 <label for="Title">Title</label>
-                <input type="text" name="title" class="form-control input-lg" id="Title"  value="Today" />
+                <input type="text"
+                       name="title"
+                       class="form-control input-lg"
+                       id="Title"
+                       value="<?=$notes['title'] ?? '';?>" />
             </div>
             <div class="form-group">
                 <label for="Content">Content</label>
-                <textarea name="content" class="form-control" id="Content" rows="10"></textarea>
+                <textarea name="content"
+                          class="form-control"
+                          id="Content"
+                          rows="10"><?=$notes['content'] ?? '';?></textarea>
             </div>
             <div class="form-group">
-                <input type="submit" id="saveBtn" class="btn btn-success btn-lg" value="Add Note">
+                <input type="submit"
+                       id="saveBtn"
+                       class="btn btn-success btn-lg"
+                       value="Add Note">
             </div>
             <input type="hidden" value="<?=$formToken;?>" id="Token" />
         </form>
