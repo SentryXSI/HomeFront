@@ -11,5 +11,6 @@
 config.php
 composer.phar
 # composer.lock
+notes/
 tmp/
 vendor/
