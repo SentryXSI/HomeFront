@@ -288,7 +288,7 @@ final class Bootstrap
      *
      * @return string
      */
-    private function getAction()
+    private function getAction(): string
     {
         $action = \ucfirst( $this->route['action'] );
         $method = $this->request['method'] . $action;
