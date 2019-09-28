@@ -75,6 +75,7 @@ class AjaxController extends BaseController
         pre( $_POST );
 
         // prepare data
+        // todo :: input filter
 
         $data = [
             'title'   => $_POST['title'],
@@ -91,17 +92,17 @@ class AjaxController extends BaseController
 
         $spl = new \SplFileObject( $path, 'w+b' );
 
-        if( false === ( $spl->fwrite( $data ) ) )
+        if( null === ( $spl->fwrite( $data ) ) )
         {
-            echo 'Notes/Add Error :: Unable to save file';
+            echo 'Notes :: Error - Unable to save file';
             pre( $path );
-            exit;
 
         } else {
 
             echo 'Notes :: Success - note created';
-            exit;
         }
+
+        $spl = null;
     }
 
     /**-------------------------------------------------------------------------
