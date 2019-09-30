@@ -203,9 +203,10 @@ final class Bootstrap
      * -------------------------------------------------------------------------
      *
      * Prepare component parts
-     *
+     * 
+     * @return array
      */
-    private function getComponent()
+    private function getComponent(): array
     {
         $component = \str_replace( ' ', '', \ucwords(
             \str_replace( '-', ' ', $this->route['component'] )
@@ -265,7 +266,7 @@ final class Bootstrap
      *
      * -------------------------------------------------------------------------
      */
-    public function getRequest()
+    private function getRequest()
     {
         $this->request = [
             'method'   => \strtolower( $_SERVER['REQUEST_METHOD'] ) ?? '',
