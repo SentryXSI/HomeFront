@@ -11,19 +11,19 @@ HomeFront provides fast access to the tools you need to get the job done.
 
 #### Components 
 
-Bridge  
-Bookmarks  
-Directory Index    
-Download Manager  
-Hosts File Manager   
-Journal   
-Notes    
-Messages  
-Password Vault      
-Todo list      
-Virtual Hosts Manager     
+    Bridge  
+    Bookmarks  
+    Directory Index    
+    Download Manager  
+    Hosts File Manager   
+    Journal   
+    Notes    
+    Messages  
+    Password Vault      
+    Todo list      
+    Virtual Hosts Manager     
 
-#### Foundation
+#### Foundations
 
 Php 7.2+    
 
