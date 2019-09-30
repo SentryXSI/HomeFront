@@ -43,6 +43,8 @@ final class Bootstrap
         $this->getConfig();
         $this->getRequest();
         $this->getRoute();
+        $this->getComponent();
+        $this->getResponse();
         $this->dispatch();
         $this->getContent();
     }
@@ -160,9 +162,6 @@ final class Bootstrap
      */
     private function dispatch()
     {
-        $this->getComponent();
-        $this->getResponse();
-
         $namespace = $this->component['namespace'];
         $classname = $this->component['controller'];
         $method    = $this->component['action'];
