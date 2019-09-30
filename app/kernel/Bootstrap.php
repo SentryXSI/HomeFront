@@ -19,9 +19,10 @@ final class Bootstrap
     private $basePath;
     private $baseUrl;
 
-    private $request  = [];
-    private $response = [];
-    private $route    = [];
+    private $component = [];
+    private $request   = [];
+    private $response  = [];
+    private $route     = [];
     private $theme;
 
     /**-------------------------------------------------------------------------
@@ -42,7 +43,6 @@ final class Bootstrap
         $this->getConfig();
         $this->getRequest();
         $this->getRoute();
-        $this->getResponse();
         $this->dispatch();
         $this->getContent();
     }
@@ -128,7 +128,7 @@ final class Bootstrap
         if( \strpos( $uri, '/' ) === false )
         {
             $this->route     = [
-                'component'  => $uri,
+                'module'     => $uri,
                 'controller' => 'index',
                 'action'     => 'index',
                 'param'      => '',
@@ -141,7 +141,7 @@ final class Bootstrap
             $tmp = \array_filter( $tmp );
 
             $this->route     = [
-                'component'  => $tmp[0] ?? 'home',
+                'module'     => $tmp[0] ?? 'home',
                 'controller' => $tmp[1] ?? 'index',
                 'action'     => $tmp[2] ?? 'index',
                 'param'      => $tmp[3] ?? '',
@@ -160,11 +160,12 @@ final class Bootstrap
      */
     private function dispatch()
     {
-        $component = $this->getComponent();
+        $this->getComponent();
+        $this->getResponse();
 
-        $namespace = $component['namespace'];
-        $classname = $component['controller'];
-        $method    = $component['action'];
+        $namespace = $this->component['namespace'];
+        $classname = $this->component['controller'];
+        $method    = $this->component['action'];
 
         $controllerClass = $namespace . $classname;
 
@@ -207,9 +208,8 @@ final class Bootstrap
      *
      * Prepare component parts
      *
-     * @return array
      */
-    private function getComponent(): array
+    private function getComponent()
     {
         $normalise = function( $input ) {
             return \str_replace( ' ', '', \ucwords(
@@ -217,27 +217,41 @@ final class Bootstrap
             ));
         };
 
-        $component = $normalise( $this->route['component'] );
-        $namespace = "App\\Components\\$component\\";
+        $module    = $normalise( $this->route['module'] );
+        $classname = $normalise( $this->route['controller'] ) . 'Controller'
+            ?? 'IndexController';
+
+        $this->component = [
+            'namespace'  => $this->getNamespace( $module ),
+            'module'     => $module,
+            'controller' => $classname,
+            'action'     => $this->getAction(),
+            'param'      => $this->route['param'] ?? '',
+            'arg'        => $this->route['arg']   ?? '',
+        ];
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Get Namespace
+     *
+     * -------------------------------------------------------------------------
+     *
+     * Prepare component namespace
+     *
+     * @param $module
+     *
+     * @return string
+     */
+    private function getNamespace( $module ): string
+    {
+        $namespace = "App\\Components\\$module\\";
 
         if( $this->route['controller'] !== 'index' ){
             $namespace .= 'Controllers\\';
         }
 
-        $classname = $normalise( $this->route['controller'] ) . 'Controller'
-            ?? 'IndexController';
-
-        $config = [
-            'namespace'  => $namespace,
-            'component'  => $component,
-            'controller' => $classname,
-            'action'     => $this->getAction(),
-            'param'      => $this->route['param'] ?? '',
-        ];
-
-        $this->route['dispatchHandler'] = $config;
-
-        return $config;
+        return $namespace;
     }
 
     /**-------------------------------------------------------------------------
@@ -293,6 +307,8 @@ final class Bootstrap
      */
     private function getResponse()
     {
+        $this->route['dispatchHandler'] = $this->component;
+
         $this->response = [
             'baseUrl'   => $this->baseUrl,
             'basePath'  => $this->basePath,
