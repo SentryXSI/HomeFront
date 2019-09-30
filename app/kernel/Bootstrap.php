@@ -203,7 +203,7 @@ final class Bootstrap
      * -------------------------------------------------------------------------
      *
      * Prepare component parts
-     * 
+     *
      * @return array
      */
     private function getComponent(): array

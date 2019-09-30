@@ -1,10 +1,13 @@
 # HomeFront
 
+![NinjaSentry HomeFront](public/assets/img/logo/ninjasentry-homefront-logo.png)
+
+
 Minimal localhost server frontend / admin control panel  
 
 ### WHAT ?
 
-HomeFront is designed to be the homepage website for your web browser.  
+HomeFront is designed to be the default homepage website for your web browser.  
 
 #### Components 
 
