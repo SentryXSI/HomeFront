@@ -29,6 +29,9 @@ class IndexController extends BaseController
      * Get Index
      *
      * -------------------------------------------------------------------------
+     *
+     * @return mixed|void
+     * @throws \Exception
      */
     public function getIndex(){
         $this->display();
