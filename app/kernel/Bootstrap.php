@@ -41,6 +41,7 @@ final class Bootstrap
         $this->getConfig();
         $this->getRequest();
         $this->getRoute();
+        $this->getResponse();
         $this->dispatch();
         $this->getContent();
     }
@@ -117,7 +118,7 @@ final class Bootstrap
      *
      * -------------------------------------------------------------------------
      */
-    public function getRoute()
+    private function getRoute()
     {
         $uri = $_GET['route'] ?? 'home';
 
@@ -175,13 +176,6 @@ final class Bootstrap
             );
         }
 
-        $this->response = [
-            'baseUrl'   => $this->baseUrl,
-            'basePath'  => $this->basePath,
-            'request'   => $this->request,
-            'route'     => $this->route,
-        ];
-
         $controller = new $controllerClass( $this->response );
 
         if( ! \is_callable([ $controller, $method ]) )
@@ -214,7 +208,7 @@ final class Bootstrap
     private function getComponent()
     {
         $component = \str_replace( ' ', '', \ucwords(
-            \str_replace( '-', ' ' , $this->route['component'] )
+            \str_replace( '-', ' ', $this->route['component'] )
         ));
 
         $namespace = "App\\Components\\$component\\";
@@ -273,9 +267,29 @@ final class Bootstrap
      */
     public function getRequest()
     {
-        $this->request['method'] = \strtolower( $_SERVER['REQUEST_METHOD'] ) ?? '';
-        $this->request['uri']    = \trim( $_SERVER['REQUEST_URI'], '/' )     ?? '';
-        $this->request['query']  = $_SERVER['QUERY_STRING']                  ?? '';
+        $this->request = [
+            'method'   => \strtolower( $_SERVER['REQUEST_METHOD'] ) ?? '',
+            'uri'      => \trim( $_SERVER['REQUEST_URI'], '/' )     ?? '',
+            'query'    => $_SERVER['QUERY_STRING']                  ?? '',
+            'protocol' => $_SERVER['SERVER_PROTOCOL']               ?? '',
+            'scheme'   => '',
+        ];
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Get Response
+     *
+     * -------------------------------------------------------------------------
+     */
+    private function getResponse()
+    {
+        $this->response = [
+            'baseUrl'   => $this->baseUrl,
+            'basePath'  => $this->basePath,
+            'request'   => $this->request,
+            'route'     => $this->route,
+        ];
     }
 
     /**-------------------------------------------------------------------------
