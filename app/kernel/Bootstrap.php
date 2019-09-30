@@ -22,6 +22,7 @@ final class Bootstrap
     private $request  = [];
     private $response = [];
     private $route    = [];
+    private $theme;
 
     /**-------------------------------------------------------------------------
      *
@@ -250,7 +251,9 @@ final class Bootstrap
     private function getContent()
     {
         $filePath = $this->basePath
-            . 'public/themes/sweet/index.html.php';
+            . 'public/themes/'
+            . $this->theme
+            .'/index.html.php';
 
         if( ! \file_exists( $filePath ) )
         {
