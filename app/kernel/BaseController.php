@@ -78,7 +78,7 @@ abstract class BaseController
 
         $path = $this->response['basePath']
             . 'app/components/'
-            . $route['component']
+            . $route['module']
             . '/views/'
             . $route['controller'];
 
