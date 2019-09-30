@@ -278,10 +278,10 @@ final class Bootstrap
     {
         $this->request = [
             'method'   => \strtolower( $_SERVER['REQUEST_METHOD'] ) ?? '',
-            'uri'      => \trim( $_SERVER['REQUEST_URI'], '/' )     ?? '',
+            'uri'      => \ltrim( $_SERVER['REQUEST_URI'], '/' )    ?? '',
             'query'    => $_SERVER['QUERY_STRING']                  ?? '',
             'protocol' => $_SERVER['SERVER_PROTOCOL']               ?? '',
-            'scheme'   => '',
+            'scheme'   => $_SERVER['REQUEST_SCHEME']                ?? '',
         ];
     }
 
@@ -317,6 +317,25 @@ final class Bootstrap
         $method = $this->request['method'] . $action;
 
         return $method;
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Log Info
+     *
+     * -------------------------------------------------------------------------
+     *
+     * Add client info to log file messages
+     *
+     * @return string
+     */
+    private function logInfo()
+    {
+        $ip  = $_SERVER['REMOTE_ADDR']     ?? '';
+        $ua  = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $uri = $this->request['uri']       ?? '/';
+
+        return " , $uri , $ip , $ua";
     }
 
     /**-------------------------------------------------------------------------
@@ -365,6 +384,7 @@ final class Bootstrap
             . \date('Y-m-d')
             . '-exceptions.log';
 
+        $message .= $this->logInfo();
         $message .= "\n";
 
         \error_log( $message, 3, $logFile );
