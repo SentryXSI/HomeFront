@@ -27,7 +27,7 @@ final class Bootstrap
      *
      * Bootstrap constructor.
      *
-     * -------------------------------------------------------------------------or.
+     * -------------------------------------------------------------------------
      *
      * @throws \Exception
      */
@@ -51,6 +51,8 @@ final class Bootstrap
      * Get Env
      *
      * -------------------------------------------------------------------------
+     *
+     * Load .env file into $_ENV super global
      *
      * @throws \Exception
      */
@@ -208,17 +210,20 @@ final class Bootstrap
      */
     private function getComponent(): array
     {
-        $component = \str_replace( ' ', '', \ucwords(
-            \str_replace( '-', ' ', $this->route['component'] )
-        ));
+        $normalise = function( $input ) {
+            return \str_replace( ' ', '', \ucwords(
+                \str_replace( '-', ' ', $input )
+            ));
+        };
 
+        $component = $normalise( $this->route['component'] );
         $namespace = "App\\Components\\$component\\";
 
         if( $this->route['controller'] !== 'index' ){
             $namespace .= 'Controllers\\';
         }
 
-        $classname = \ucfirst( $this->route['controller'] ) . 'Controller'
+        $classname = $normalise( $this->route['controller'] ) . 'Controller'
             ?? 'IndexController';
 
         $config = [
