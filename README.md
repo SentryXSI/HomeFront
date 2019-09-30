@@ -12,15 +12,18 @@ HomeFront provides fast access to the tools you need to get the job done.
 #### Components 
 
     Bridge  
+    Blog  
     Bookmarks  
+    ChangeLog  
+    Contacts  
     Directory Index    
     Download Manager  
     Hosts File Manager   
     Journal   
-    Notes    
+    Notes ( + code snippets )   
     Messages  
     Password Vault      
-    Todo list      
+    Todo List      
     Virtual Hosts Manager     
 
 #### Foundations

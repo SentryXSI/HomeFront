@@ -8,3 +8,10 @@
     font-size:14px;
     padding:10px;
 }
+
+pre {
+    background:#161616;
+    color:#fff;
+    font-size:12px;
+    font-weight:bold;
+}
