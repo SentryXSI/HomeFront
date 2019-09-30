@@ -351,7 +351,7 @@ final class Bootstrap
     {
         $message = $e->getMessage();
 
-        echo '<h1>Exception</h1>';
+        echo '<h1>Bootstrap Exception</h1>';
         pre( $message );
 
         pre( 'Line : ' . $e->getLine() );
@@ -364,6 +364,8 @@ final class Bootstrap
             . 'app/tmp/'
             . \date('Y-m-d')
             . '-exceptions.log';
+
+        $message .= "\n";
 
         \error_log( $message, 3, $logFile );
     }
@@ -380,7 +382,7 @@ final class Bootstrap
 
         if( isset( $error['type'] ) )
         {
-            $message = \implode( ' ', $error );
+            $message = \implode( ' ', $error ) . "\n";
             $logFile = $this->basePath
                 . 'app/tmp/'
                 . \date('Y-m-d')
