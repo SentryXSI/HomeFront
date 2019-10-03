@@ -216,14 +216,14 @@ final class Bootstrap
             ));
         };
 
-        $module    = $normalise( $this->route['module'] );
-        $classname = $normalise( $this->route['controller'] ) . 'Controller'
+        $module     = $normalise( $this->route['module'] );
+        $controller = $normalise( $this->route['controller'] ) . 'Controller'
             ?? 'IndexController';
 
         $this->component = [
             'namespace'  => $this->getNamespace( $module ),
             'module'     => $module,
-            'controller' => $classname,
+            'controller' => $controller,
             'action'     => $this->getAction(),
             'param'      => $this->route['param'] ?? '',
             'arg'        => $this->route['arg']   ?? '',
@@ -394,15 +394,10 @@ final class Bootstrap
         echo '<hr /><p>Trace</p>';
         pre( $e->getTrace() );
 
-        $logFile = $this->basePath
-            . 'app/tmp/'
-            . \date('Y-m-d')
-            . '-exceptions.log';
-
         $message .= $this->logInfo();
         $message .= "\n";
 
-        \error_log( $message, 3, $logFile );
+        $this->log( $message, 'exceptions' );
     }
 
     /**-------------------------------------------------------------------------
@@ -415,15 +410,34 @@ final class Bootstrap
     {
         $error = \error_get_last();
 
-        if( isset( $error['type'] ) )
-        {
+        if( isset( $error['type'] ) ) {
             $message = \implode( ' ', $error ) . "\n";
-            $logFile = $this->basePath
-                . 'app/tmp/'
-                . \date('Y-m-d')
-                . '-shutdown-error.log';
-
-            \error_log( $message, 3, $logFile );
+            $this->log( $message, 'shutdown-error' );
         }
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Log
+     *
+     * -------------------------------------------------------------------------
+     *
+     * Create log file in app/tmp/
+     *
+     * @param $message
+     * @param $filename
+     */
+    private function log( $message, $filename )
+    {
+        $name = $filename ?? 'error';
+
+        $logFile = $this->basePath
+            . 'app/tmp/'
+            . \date('Y-m-d')
+            . '-'
+            . $name
+            . '.log';
+
+        \error_log( $message, 3, $logFile );
     }
 }
