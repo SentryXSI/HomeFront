@@ -14,7 +14,7 @@ use App\Kernel\BaseController;
  *
  * @package App\Components\Notes
  */
-class IndexController extends BaseController
+final class IndexController extends BaseController
 {
     /**-------------------------------------------------------------------------
      *
@@ -33,6 +33,8 @@ class IndexController extends BaseController
      * Get Index
      *
      * -------------------------------------------------------------------------
+     *
+     * Notes demo page
      *
      * @return mixed|void
      * @throws \Exception
