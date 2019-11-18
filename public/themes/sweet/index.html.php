@@ -26,10 +26,6 @@ $themePath = $this->baseUrl . '/themes/sweet/assets/css/';
     <script type="text/javascript" src="<?=$this->baseUrl;?>/themes/sweet/assets/js/main.js"></script>
 </head>
 <body>
-<?php
-
-echo $this->content;
-
-?>
+<?php echo $this->content; ?>
 </body>
 </html>

@@ -9,7 +9,7 @@ namespace App\Kernel;
  *
  * -----------------------------------------------------------------------------
  *
- * new Response( )
+ * new Response( $config )
  *
  * @package App\Kernel
  */

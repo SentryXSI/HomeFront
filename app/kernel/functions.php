@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-function pre( $vars, $dump = false )
+function pre( $vars, bool $dump = false ): void
 {
     ob_start();
 
@@ -16,4 +16,8 @@ function pre( $vars, $dump = false )
     echo '<pre>';
     echo \htmlspecialchars( $contents, \ENT_QUOTES, 'UTF-8' );
     echo '</pre>';
+}
+
+function escaped( string $data ): string {
+    return \htmlspecialchars( $data, \ENT_QUOTES, 'UTF-8' );
 }

@@ -92,16 +92,19 @@ class AjaxController extends BaseController
      */
     private function prepare()
     {
-        $data = [
-            'title'   => $_POST['title'],
-            'content' => $_POST['content'],
-            'created' => \date('Y-m-d H:i:s'),
-            'updated' => \date('Y-m-d H:i:s'),
-        ];
-
         try{
 
-            $data = \json_encode( $data, JSON_THROW_ON_ERROR );
+            $data = [
+                'id'      => 1,
+                'title'   => $_POST['title'],
+                'content' => $_POST['content'],
+                'created' => \date('Y-m-d H:i:s'),
+                'updated' => \date('Y-m-d H:i:s'),
+            ];
+
+            $data = \json_encode(
+                $data, JSON_THROW_ON_ERROR
+            );
 
             return $data;
         }
