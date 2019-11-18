@@ -27,7 +27,9 @@ meta_end
         <h2>About HomeFront</h2>
     </div>
     <div class="col-xs-12">
-        <p>HomeFront is a minimal cms / control panel for your localhost server.</p>
+        <p>HomeFront is a minimal cms / control panel for your localhost server
+            which also serves as the default homepage for your browser.
+        </p>
     </div>
     <div class="col-xs-12">
         <?php pre( $this ); ?>
