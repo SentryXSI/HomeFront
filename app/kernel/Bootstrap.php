@@ -39,6 +39,19 @@ final class Bootstrap
         set_exception_handler([ $this, 'exceptionHandler']);
         set_error_handler([ $this, 'errorHandler']);
 
+        $this->foundation();
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Foundation
+     *
+     * -------------------------------------------------------------------------
+     *
+     * @throws \Exception
+     */
+    private function foundation()
+    {
         $this->getEnv();
         $this->getConfig();
         $this->getRequest();
@@ -175,7 +188,7 @@ final class Bootstrap
                 . 'Controller not found ( '
                 . $controllerClass
                 . ' )'
-                , 404
+                , 404 // Http\Status::NOT_FOUND
             );
         }
 
@@ -190,7 +203,7 @@ final class Bootstrap
                 . ' ) not found in controller ( '
                 . $controllerClass
                 . ' )'
-                , 404
+                , 404 // Http\Status::NOT_FOUND
             );
         }
 

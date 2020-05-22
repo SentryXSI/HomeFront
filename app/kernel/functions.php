@@ -1,7 +1,13 @@
 <?php
 declare(strict_types=1);
 
-function pre( $vars, bool $dump = false ): void
+/**
+ * Pre Code
+ *
+ * @param      $vars
+ * @param bool $dump
+ */
+function pre( $vars, bool $dump = false ) : void
 {
     ob_start();
 
@@ -14,10 +20,17 @@ function pre( $vars, bool $dump = false ): void
     $contents = ob_get_clean();
 
     echo '<pre>';
-    echo \htmlspecialchars( $contents, \ENT_QUOTES, 'UTF-8' );
+    echo escaped( $contents );
     echo '</pre>';
 }
 
-function escaped( string $data ): string {
-    return \htmlspecialchars( $data, \ENT_QUOTES, 'UTF-8' );
+/**
+ * Escaped String
+ *
+ * @param string $data
+ *
+ * @return string
+ */
+function escaped( string $data ) : string {
+    return \htmlspecialchars( $data, \ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 }

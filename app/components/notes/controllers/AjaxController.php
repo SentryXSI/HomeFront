@@ -147,8 +147,7 @@ class AjaxController extends BaseController
 
         if( null === ( $spl->fwrite( $data ) ) )
         {
-            echo 'Notes Error :: save() - Unable to save file';
-            pre( $path );
+            echo '<p class="alert alert-success">Notes Error :: save() - Unable to save file</p>';
 
         } else {
 
@@ -198,7 +197,8 @@ class AjaxController extends BaseController
             );
         }
 
-        // $data['title'] = $input->post('title')
+        // $data['title'] = $input
+        //       ->post('title')
         //       ->strLen('65')
         //       ->notEmpty()
         //       ->acceptOnly('text')
