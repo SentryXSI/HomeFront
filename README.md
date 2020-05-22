@@ -78,7 +78,7 @@ HTTP :
     
 Check the install guide for more details :  
  
-https://github.com/sentryxsi/homefront/docs/01-install.md  
+https://github.com/SentryXSI/homefront/blob/master/docs/01-install.md  
 
 
 #### Foundations
