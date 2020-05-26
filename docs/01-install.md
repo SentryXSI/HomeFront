@@ -11,7 +11,19 @@ Or, clone the repo :
 
 1 : Choose a hostname eg ( homefront.mint )  
 
-2 : Set up a virtual host for httpd.    
+2 : Set up a virtual host for httpd.      
+
+
+    <VirtualHost *:80>
+        DocumentRoot "/var/www/html/homefront/public/"
+        ServerName homefront.mint
+        ServerAlias www.homefront.mint
+        <Directory "/var/www/html/homefront/public/">
+            AllowOverride all
+            Require all granted
+        </Directory>
+    </VirtualHost>
+
 
 3 : Add homefront.mint domain to your hosts file.    
 
