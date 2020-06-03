@@ -22,7 +22,7 @@ function pre( $vars, bool $dump = false ) : void
 
     $contents = ob_get_clean();
 
-    echo '<pre>';
+    echo '<pre class="pre-code">';
     echo escaped( $contents );
     echo '</pre>';
 }
