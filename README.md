@@ -8,12 +8,10 @@ designed to be the default homepage for your web browser.
 
 HomeFront provides direct access to the tools you need to get things done.   
 
-Work from anywhere, save your ideas for later.
-
 ### Where ?
 
-Intended for use on your own private local network.   
-HomeFront is not suitable for installing on a public server.
+Intended for use on your own private local network, behind a firewall.   
+HomeFront is not suitable for installing on a public server.  
 
 ### Why ? 
 
@@ -31,14 +29,13 @@ and offline development.
 No background requests or remote callbacks of any kind are allowed.  
 No auto updates.  
 
-Portable Foundations. 
+### Portable Foundations. 
 
-No database is required.  
-All data is stored in json files.  
+No database is required.   
+All data is stored in json files.      
 
 Simply archive the contents of your site ( tar.gz / .zip ) 
-and move the files to another computer.
-
+and move the files to another computer.    
 
 #### Components List
 
