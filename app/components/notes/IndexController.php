@@ -11,6 +11,7 @@ use App\Kernel\BaseController;
  *
  * -----------------------------------------------------------------------------
  *
+ * Notes component index page
  *
  * @package App\Components\Notes
  */

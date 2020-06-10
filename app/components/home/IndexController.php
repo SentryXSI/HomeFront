@@ -11,9 +11,11 @@ use App\Kernel\BaseController;
  *
  * -----------------------------------------------------------------------------
  *
+ * Home component index page
+ *
  * @package App\Components\Home
  */
-class IndexController extends BaseController
+final class IndexController extends BaseController
 {
     /**-------------------------------------------------------------------------
      *

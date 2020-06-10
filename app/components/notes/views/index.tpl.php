@@ -24,7 +24,7 @@ meta_end
 
 // TODO :: add $_SESSION + CSRF token validation
 
-// temporary form token ^_-
+// super yolo temporary form token ^_-
 $date        = \date('d-m-y H:i:s');
 $appToken    = \ip2long( $_SERVER['SERVER_ADDR'] ) . $date;
 $clientToken = \ip2long( $_SERVER['REMOTE_ADDR'] ) . $date;
@@ -33,16 +33,39 @@ $formToken   = \hash_hmac( 'sha512', $clientToken, $appToken );
 // form content
 $notes       = $this->response['content']['body'] ?? [];
 
+// TODO :: Get list of existing notes
+$lister = [];
+
 ?>
 <div class="inner-content">
     <div class="ns-heading col-xs-12">
         <h2>My Notes</h2>
     </div>
     <div class="col-xs-12 col-sm-4">
+
         <h4>List</h4>
+
         <ul>
-            <li>1</li>
+            <li><a href="<?=$this->baseUrl;?>notes/1">1</a></li>
         </ul>
+
+        <?php
+
+        /*
+        if( is_array( $lister ) )
+        {
+            foreach( $lister as $item )
+            {
+                $label = '';
+                $url   = '';
+
+                //echo '<a href="' . $url . '" title="">' . $label . '</a>';
+            }
+        }
+        */
+
+        ?>
+
     </div>
     <div class="col-xs-12 col-sm-8">
         <form id="textEditor" action="notes/add" method="post" role="form">

@@ -7,15 +7,15 @@ use App\Kernel\BaseController;
 
 /**-----------------------------------------------------------------------------
  *
- * Class IndexController
+ * Class AjaxController
  *
  * -----------------------------------------------------------------------------
  *
- * Class IndexController
+ * Notes controller ajax handler
  *
  * @package App\Components\Notes\Controllers
  */
-class AjaxController extends BaseController
+final class AjaxController extends BaseController
 {
     /**-------------------------------------------------------------------------
      *
@@ -143,6 +143,20 @@ class AjaxController extends BaseController
             );
         }
 
+        $this->write( $path, $data );
+    }
+
+    /**-------------------------------------------------------------------------
+     *
+     * Write
+     *
+     * -------------------------------------------------------------------------
+     *
+     * @param $path
+     * @param $data
+     */
+    private function write( $path, $data )
+    {
         $spl = new \SplFileObject( $path, 'w+b' );
 
         if( null === ( $spl->fwrite( $data ) ) )
